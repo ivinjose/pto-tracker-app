@@ -12,9 +12,11 @@ import useAuth from "../hooks/useAuth";
  */
 export function PersistLogin({ children }: { children: React.ReactNode }) {
 	const refresh = useRefreshToken();
-	const { auth, persist, setIsLoading, isLoading } = useAuth();
+	const { auth, persist, persistLoaded, setIsLoading, isLoading } = useAuth();
 
 	useEffect(() => {
+		if (!persistLoaded) return;
+
 		const verifyRefreshToken = async () => {
 			try {
 				await refresh();
@@ -30,7 +32,7 @@ export function PersistLogin({ children }: { children: React.ReactNode }) {
 		} else {
 			setIsLoading(false);
 		}
-	}, [persist]);
+	}, [persistLoaded]);
 
 	// Show loader only while we're verifying (persist on, no token yet)
 	if (persist && isLoading) {

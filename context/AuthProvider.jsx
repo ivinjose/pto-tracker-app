@@ -26,14 +26,18 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
 	const [auth, setAuth] = useState({});
 	const [persist, setPersist] = useState(false);
+	const [persistLoaded, setPersistLoaded] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		getPersist().then(setPersist);
+		getPersist().then((value) => {
+			setPersist(value);
+			setPersistLoaded(true);
+		});
 	}, []);
 
 	return (
-		<AuthContext.Provider value={{ auth, setAuth, persist, setPersist, isLoading, setIsLoading }}>
+		<AuthContext.Provider value={{ auth, setAuth, persist, setPersist, persistLoaded, isLoading, setIsLoading }}>
 			{children}
 		</AuthContext.Provider>
 	);
