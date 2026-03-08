@@ -14,6 +14,7 @@ import axios from '../../api/axios';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import useAuth from '../../hooks/useAuth';
+import { storeRefreshToken } from '../../hooks/useRefreshToken';
 
 const LOGIN_URL = '/api/login';
 const PERSIST_KEY = 'persist';
@@ -73,9 +74,10 @@ export default function LoginScreen() {
         }
       );
 
-      const { accessToken, isAdmin, name, id } = response?.data?.data ?? {};
+      const { accessToken, isAdmin, name, id, refreshToken } = response?.data?.data ?? {};
 
       setAuth({ accessToken, isAdmin, name, id });
+      await storeRefreshToken(refreshToken);
       setUsername('');
       setPassword('');
       setSuccessMessage(response?.data?.message ?? 'Login successful');
