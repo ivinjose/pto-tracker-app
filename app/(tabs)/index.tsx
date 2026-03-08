@@ -1,98 +1,70 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { useQuery } from "@tanstack/react-query";
+import { ScrollView, Text, View } from "react-native";
+import useOffDaysApiManager from "../../api-managers/OffDaysApiManager";
+// import NewOffDayDialog from "../../components/NewOffDayDialog";
+// import OffDayCalendar from "../../components/OffDayCalendar";
+// import OffDayCard from "../../components/OffDayCard";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+/**
+ * Expo/React Native version of HomePage for mobile devices.
+ * Uses NativeWind for styling (Tailwind-like classes).
+ *
+ * Note: Child components (PageHeader, OffDayCalendar, NewOffDayDialog, OffDayCard)
+ * must have React Native–compatible implementations when used in an Expo project.
+ */
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          EDITT <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+// useEffect(() => {
+// 	axios.get('/api/login').then((response) => {
+// 		console.log(response.data);
+// 	});
+// }, []);
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+export default function HomePage() {
+	const offDaysApiManager = useOffDaysApiManager();
+
+	const { data: processedOffdays, isProcessedOffDaysLoading } = useQuery({
+		queryKey: ["processedOffdays"],
+		queryFn: () => offDaysApiManager.getProcessedOffDays({}),
+	});
+
+	const { data: calendarDays, isCalendarLoading } = useQuery({
+		queryKey: ["calendarDays"],
+		queryFn: () => offDaysApiManager.getRawOffDays({}),
+	});
+
+	const handleCalendarSelect = (dates) => {
+		console.log(dates);
+		console.log(processedOffdays);
+	};
+
+	return (
+		<View className="text-sm flex-1  bg-white">
+			<View className="flex flex-col">
+				<View className="flex flex-col">
+					<Text>Off Day Calendar</Text>
+					{/* <OffDayCalendar
+						processedOffdays={processedOffdays}
+						onSelect={handleCalendarSelect}
+					/> */}
+					<View className="flex justify-center mt-5 mb-5">
+						{/* <NewOffDayDialog /> */}
+						<Text>New Off Day Dialog</Text>
+					</View>
+					<ScrollView
+						className="flex-1"
+						showsVerticalScrollIndicator={false}
+					>
+						<View className="gap-5 mt-5">
+							{processedOffdays?.map((offDay) => (
+								<View key={offDay._id}>
+									<Text>Off Day Card</Text>
+									{/* <OffDayCard {...offDay} /> */}
+								</View>
+							))}
+						</View>
+					</ScrollView>
+				</View>
+			</View>
+		</View>
+	);
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
