@@ -1,5 +1,4 @@
 import { Link, useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
 import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -17,7 +16,6 @@ import useAuth from '../../hooks/useAuth';
 import { storeRefreshToken } from '../../hooks/useRefreshToken';
 
 const LOGIN_URL = '/api/login';
-const PERSIST_KEY = 'persist';
 
 export default function LoginScreen() {
   const { setAuth, persist, setPersist } = useAuth();
@@ -41,21 +39,6 @@ export default function LoginScreen() {
   const togglePersist = () => {
     setPersist((prev) => !prev);
   };
-
-  useEffect(() => {
-    const savePersist = async () => {
-      try {
-        if (Platform.OS === 'web') {
-          localStorage.setItem(PERSIST_KEY, JSON.stringify(persist));
-        } else {
-          await SecureStore.setItemAsync(PERSIST_KEY, JSON.stringify(persist));
-        }
-      } catch {
-        // Ignore storage errors
-      }
-    };
-    savePersist();
-  }, [persist]);
 
   const handleSubmit = async () => {
     if (!username || !password) return;

@@ -2,10 +2,9 @@ import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 
 import axios from "../api/axios";
+import { PERSIST_KEY } from "../constants/auth";
 import useAuth from "./useAuth";
 import { REFRESH_TOKEN_KEY } from "./useRefreshToken";
-
-const PERSIST_KEY = "persist";
 
 const useLogout = () => {
     const { setAuth, setPersist } = useAuth();

@@ -2,7 +2,7 @@ import * as SecureStore from "expo-secure-store";
 import { createContext, useEffect, useState } from "react";
 import { Platform } from "react-native";
 
-const PERSIST_KEY = "persist";
+import { PERSIST_KEY } from "../constants/auth";
 
 const getPersist = async () => {
 	if (Platform.OS === "web") {
@@ -38,6 +38,22 @@ export const AuthProvider = ({ children }) => {
 				setPersistLoaded(true);
 			});
 	}, []);
+
+	useEffect(() => {
+		if (!persistLoaded) return;
+		const savePersist = async () => {
+			try {
+				if (Platform.OS === "web") {
+					localStorage.setItem(PERSIST_KEY, JSON.stringify(persist));
+				} else {
+					await SecureStore.setItemAsync(PERSIST_KEY, JSON.stringify(persist));
+				}
+			} catch {
+				// Ignore storage errors
+			}
+		};
+		savePersist();
+	}, [persist, persistLoaded]);
 
 	return (
 		<AuthContext.Provider
