@@ -1,20 +1,23 @@
 import { useEffect } from "react";
-import { ActivityIndicator, View } from "react-native";
-import useRefreshToken from "../hooks/useRefreshToken";
 import useAuth from "../hooks/useAuth";
+import useRefreshToken from "../hooks/useRefreshToken";
 
 /**
- * PersistLogin wraps app content and verifies/refreshes the auth token
- * when the user has "Trust this device" enabled and returns to the app.
- * - If persist is off: resolves immediately and renders children.
- * - If persist is on and no access token: attempts refresh, shows loader until done.
- * - When done (success or fail), renders children; (tabs) layout redirects to login if needed.
+ * PersistLogin silently verifies/refreshes the auth token on app start when
+ * "Trust this device" is enabled. It never unmounts children — the (tabs)
+ * layout handles the loading state via isLoading from AuthContext.
+ *
+ * - If persist is off: clears isLoading immediately; (tabs) redirects to login.
+ * - If persist is on and no access token: attempts refresh; (tabs) shows a
+ *   loader until isLoading is cleared (success or fail).
  */
 export function PersistLogin({ children }: { children: React.ReactNode }) {
 	const refresh = useRefreshToken();
-	const { auth, persist, setIsLoading, isLoading } = useAuth();
+	const { auth, persist, persistLoaded, setIsLoading } = useAuth();
 
 	useEffect(() => {
+		if (!persistLoaded) return;
+
 		const verifyRefreshToken = async () => {
 			try {
 				await refresh();
@@ -30,16 +33,7 @@ export function PersistLogin({ children }: { children: React.ReactNode }) {
 		} else {
 			setIsLoading(false);
 		}
-	}, [persist]);
-
-	// Show loader only while we're verifying (persist on, no token yet)
-	if (persist && isLoading) {
-		return (
-			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-				<ActivityIndicator size="large" />
-			</View>
-		);
-	}
+	}, [persist, persistLoaded]);
 
 	return <>{children}</>;
 }
