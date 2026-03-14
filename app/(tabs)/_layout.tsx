@@ -5,6 +5,7 @@ import { ActivityIndicator, View } from 'react-native';
 import useAuth from '../../hooks/useAuth';
 
 import { HapticTab } from '@/components/haptic-tab';
+import { LogoutTabButton } from '@/components/logout-tab-button';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -41,9 +42,17 @@ export default function AppLayout() {
 					title: 'Home',
 					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
 				}} />
-			<Tabs.Screen name="manage" options={{ title: 'Manage' }} />
-			<Tabs.Screen name="train-bookings" options={{ title: 'Trains' }} />
-			<Tabs.Screen name="profiles" options={{ title: 'Profiles' }} />
+			<Tabs.Screen name="ProfileScreen" options={{ title: 'Profiles' }} />
+			<Tabs.Screen
+				name="logout"
+				options={{
+					title: 'Logout',
+					tabBarIcon: ({ color }) => (
+						<IconSymbol size={28} name="rectangle.portrait.and.arrow.right" color={color} />
+					),
+					tabBarButton: (props) => <LogoutTabButton {...props} />,
+				}}
+			/>
 		</Tabs>
 	);
 }

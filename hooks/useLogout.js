@@ -5,20 +5,29 @@ import axios from "../api/axios";
 import useAuth from "./useAuth";
 import { REFRESH_TOKEN_KEY } from "./useRefreshToken";
 
+const PERSIST_KEY = "persist";
+
 const useLogout = () => {
-    const { setAuth } = useAuth();
+    const { setAuth, setPersist } = useAuth();
 
     const logout = async () => {
         setAuth({});
+        setPersist(false);
 
         try {
             if (Platform.OS === "web") {
                 await axios("/api/logout", { withCredentials: true });
+                try {
+                    localStorage.removeItem(PERSIST_KEY);
+                } catch {
+                    // Ignore
+                }
             } else {
                 await axios("/api/logout", {
                     headers: await getAuthHeadersForLogout(),
                 });
                 await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+                await SecureStore.deleteItemAsync(PERSIST_KEY);
             }
         } catch (err) {
             console.log(err);
