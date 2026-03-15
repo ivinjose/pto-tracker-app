@@ -7,7 +7,7 @@ import useAuth from '../../hooks/useAuth';
 import { HapticTab } from '@/components/haptic-tab';
 import { LogoutTabButton } from '@/components/logout-tab-button';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/constants/theme';
+import { Colors } from '@/lib/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import useLogout from '@/hooks/useLogout';
 import { LogOut } from 'lucide-react-native';
