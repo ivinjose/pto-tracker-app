@@ -4,6 +4,7 @@ import useOffDaysApiManager from "../../api-managers/OffDaysApiManager";
 // import NewOffDayDialog from "../../components/NewOffDayDialog";
 // import OffDayCalendar from "../../components/OffDayCalendar";
 // import OffDayCard from "../../components/OffDayCard";
+import OffDayCard from "@/components/ui/OffDayCard";
 
 /**
  * Expo/React Native version of HomePage for mobile devices.
@@ -57,8 +58,8 @@ export default function HomePage() {
 						<View className="gap-5 mt-5">
 							{processedOffdays?.map((offDay) => (
 								<View key={offDay._id}>
-									<Text>Off Day Card</Text>
-									{/* <OffDayCard {...offDay} /> */}
+
+									<OffDayCard {...offDay} />
 								</View>
 							))}
 						</View>
