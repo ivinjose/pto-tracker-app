@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Redirect, Tabs } from 'expo-router';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, Pressable, View } from 'react-native';
 import useAuth from '../../hooks/useAuth';
 
 import { HapticTab } from '@/components/haptic-tab';
@@ -9,9 +9,12 @@ import { LogoutTabButton } from '@/components/logout-tab-button';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import useLogout from '@/hooks/useLogout';
+import { LogOut } from 'lucide-react-native';
 
 export default function AppLayout() {
 	const colorScheme = useColorScheme();
+	const logout = useLogout();
 	const { auth, isLoading } = useAuth();
 
 	// 1. Show a loader while checking the token (Step 3 logic)
@@ -33,7 +36,7 @@ export default function AppLayout() {
 		<Tabs
 			screenOptions={{
 				tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-				headerShown: false,
+				headerShown: true,
 				tabBarButton: HapticTab,
 			}}>
 			<Tabs.Screen
@@ -41,7 +44,18 @@ export default function AppLayout() {
 				options={{
 					title: 'Home',
 					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-				}} />
+					headerRight: () => (
+						<Pressable
+							onPress={async () => {
+								await logout();
+							}}
+							style={{ marginRight: 15 }}
+						>
+							<LogOut size={24} color="red" />
+						</Pressable>
+					),
+				}}
+			/>
 			<Tabs.Screen name="ProfileScreen" options={{ title: 'Profiles' }} />
 			<Tabs.Screen
 				name="logout"
