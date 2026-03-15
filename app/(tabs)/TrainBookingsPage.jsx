@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import CardView from "@/components/CardView";
 import NewTrainBookingDialog from "@/components/NewTrainBookingDialog/NewTrainBookingDialog";
-import TrainBookingCard from "@/components/TrainBookingCard/TrainBookingCard";
+import TrainBookingCard from "@/components/TrainBookingCard";
 import useTrainBookingApiManager from "@/api-managers/TrainBookingApiManager";
 
 export default function TrainBookingsPage() {
