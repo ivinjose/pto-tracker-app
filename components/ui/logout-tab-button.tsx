@@ -1,7 +1,7 @@
 import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { PlatformPressable } from '@react-navigation/elements';
 import * as Haptics from 'expo-haptics';
-import useLogout from '../hooks/useLogout';
+import useLogout from '../../hooks/useLogout';
 
 export function LogoutTabButton(props: BottomTabBarButtonProps) {
 	const logout = useLogout();

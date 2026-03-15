@@ -4,12 +4,12 @@ import { Redirect, Tabs } from 'expo-router';
 import { ActivityIndicator, Pressable, View } from 'react-native';
 import useAuth from '../../hooks/useAuth';
 
-import { HapticTab } from '@/components/haptic-tab';
-import { LogoutTabButton } from '@/components/logout-tab-button';
+import { HapticTab } from '@/components/ui/haptic-tab';
 import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Colors } from '@/lib/theme';
+import { LogoutTabButton } from '@/components/ui/logout-tab-button';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import useLogout from '@/hooks/useLogout';
+import { Colors } from '@/lib/theme';
 import { LogOut } from 'lucide-react-native';
 
 export default function AppLayout() {

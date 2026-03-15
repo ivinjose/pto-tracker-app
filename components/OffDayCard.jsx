@@ -28,7 +28,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { format, isSameDay } from "date-fns";
 
 import CardView from "@/components/CardView";
-import useOffDaysApiManager from "../../api-managers/OffDaysApiManager";
+import useOffDaysApiManager from "../api-managers/OffDaysApiManager";
 
 const OffDayCard = ({
     _id,

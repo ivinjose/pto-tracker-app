@@ -1,8 +1,8 @@
+import OffDayCard from "@/components/OffDayCard";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react-native";
 import { Pressable, ScrollView, Text, View } from "react-native";
 import useOffDaysApiManager from "../../api-managers/OffDaysApiManager";
-import OffDayCard from "@/components/ui/OffDayCard";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type OffDay = Record<string, any>;
