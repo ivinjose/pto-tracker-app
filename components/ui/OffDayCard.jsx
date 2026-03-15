@@ -79,9 +79,43 @@ const OffDayCard = ({
         <>
             <CardView actions={actions}>
                 <Dialog>
+                    <View className="flex-row items-center p-4">
+                        <DialogTrigger asChild>
+                            <Pressable className="active:opacity-80 mr-4">
+                                <CalendarPlus size={48} color="#212933" />
+                            </Pressable>
+                        </DialogTrigger>
+
+                        <View className="flex-1 min-w-0">
+                            <Text className="text-base font-semibold text-[#212933]">
+                                {offday_name}
+                            </Text>
+                            <Text className="mt-1 text-sm font-normal text-[#444]">
+                                {offday_owner}
+                            </Text>
+                            <OffDays start_date={start_date} end_date={end_date} />
+                            {remarks ? (
+                                <Text className="mt-1 text-sm text-[#555]">{remarks}</Text>
+                            ) : null}
+                        </View>
+                    </View>
+
+                    <View className="px-4 pb-2">
+                        <WeekendProximityAlert
+                            weekendProximity={weekendProximity}
+                            start_date={start_date}
+                            end_date={end_date}
+                        />
+                        <PTORecommendationForWeekend datesToWeekend={datesToWeekend} />
+                        <OffDayRecommendation recommendation={lastOffDay} />
+                        <OffDayRecommendation recommendation={nextOffDay} />
+                    </View>
+
                     <DialogTrigger asChild>
-                        <Pressable className="active:opacity-80">
-                            <CalendarPlus size={80} color="#30425f" />
+                        <Pressable className="mx-4 mb-4 rounded-lg bg-[#212933] py-3 active:opacity-90">
+                            <Text className="text-center text-base font-medium text-white">
+                                View details
+                            </Text>
                         </Pressable>
                     </DialogTrigger>
 
@@ -91,42 +125,8 @@ const OffDayCard = ({
                                 {offday_name}
                             </Text>
                         </DialogTitle>
-
-                        {/* <Calendar
-                            mode="range"
-                            fromMonth={start_date}
-                            toMonth={end_date}
-                            selected={{
-                                from: start_date,
-                                to: end_date,
-                            }}
-                            modifiers={{
-                                weekend: isWeekend,
-                            }}
-                        /> */}
                     </DialogContent>
                 </Dialog>
-
-                <View className="self-start w-full mt-3 gap-1">
-                    <Text className="text-lg font-medium my-1.5">{offday_name}</Text>
-
-                    <Text className="text-sm font-normal text-[#444] mb-1.5 last:mb-0">{offday_owner}</Text>
-
-                    <OffDays start_date={start_date} end_date={end_date} />
-
-                    <Text className="text-sm text-[#555] my-1.5">{remarks}</Text>
-
-                    <WeekendProximityAlert
-                        weekendProximity={weekendProximity}
-                        start_date={start_date}
-                        end_date={end_date}
-                    />
-
-                    <PTORecommendationForWeekend datesToWeekend={datesToWeekend} />
-
-                    <OffDayRecommendation recommendation={lastOffDay} />
-                    <OffDayRecommendation recommendation={nextOffDay} />
-                </View>
             </CardView>
 
             <AlertDialog open={showConfirm} onOpenChange={setShowConfirm}>
@@ -157,14 +157,14 @@ const OffDayCard = ({
 };
 
 const OffDays = ({ start_date, end_date }) => {
-    const rowClass = "text-sm font-normal text-[#444] mb-1.5";
+    const rowClass = "text-sm font-normal text-[#444]";
     if (isSameDay(start_date, end_date)) {
-        return <Text className={rowClass}>{format(start_date, 'PPPP')}</Text>;
+        return <Text className={`${rowClass} mt-0.5`}>{format(start_date, 'PPPP')}</Text>;
     }
     return (
-        <View className="gap-0">
+        <View className="mt-0.5 gap-0.5">
             <Text className={rowClass}>From: {format(start_date, 'PPPP')}</Text>
-            <Text className={`${rowClass} mb-0`}>To: {format(end_date, 'PPPP')}</Text>
+            <Text className={rowClass}>To: {format(end_date, 'PPPP')}</Text>
         </View>
     )
 }

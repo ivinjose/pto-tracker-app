@@ -10,7 +10,7 @@ import {
 
 const CardView = ({ children, actions = [] }) => {
     return (
-        <View className="bg-white rounded-xl border border-gray-200 p-4">
+        <View className="overflow-hidden rounded-lg bg-white shadow-md shadow-black/5">
             {children}
 
             {actions.length > 0 && (
