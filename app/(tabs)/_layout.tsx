@@ -56,11 +56,12 @@ export default function AppLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen name="TrainBookingsPage" options={{ title: 'Train Bookings' }} />
 			<Tabs.Screen name="ProfileScreen" options={{ title: 'Profiles' }} />
 			<Tabs.Screen
 				name="logout"
 				options={{
-					title: 'Logout',
+					title: 'Account',
 					tabBarIcon: ({ color }) => (
 						<IconSymbol size={28} name="rectangle.portrait.and.arrow.right" color={color} />
 					),
