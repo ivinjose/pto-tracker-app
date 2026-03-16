@@ -8,7 +8,7 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form(from composer)";
+} from "@/components/ui/form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
