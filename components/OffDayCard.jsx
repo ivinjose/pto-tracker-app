@@ -69,7 +69,7 @@ const OffDayCard = ({
 
         return [
             {
-                label: "Delete",
+                label: <Text>Delete</Text>,
                 action: () => setShowConfirm(true),
             },
         ];
@@ -143,11 +143,11 @@ const OffDayCard = ({
 
                     <AlertDialogFooter>
                         <AlertDialogCancel onPress={() => setShowConfirm(false)}>
-                            Cancel
+                            <Text>Cancel</Text>
                         </AlertDialogCancel>
 
                         <AlertDialogAction onPress={onDelete}>
-                            Continue
+                            <Text>Continue</Text>
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

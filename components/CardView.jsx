@@ -1,5 +1,5 @@
 import { EllipsisVertical } from "lucide-react-native";
-import { Pressable, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
 import {
     DropdownMenu,
@@ -25,7 +25,7 @@ const CardView = ({ children, actions = [] }) => {
                         <DropdownMenuContent>
                             {actions.map((action, index) => (
                                 <DropdownMenuItem key={index} onPress={action.action}>
-                                    {action.label}
+                                    <Text>{action.label}</Text>
                                 </DropdownMenuItem>
                             ))}
                         </DropdownMenuContent>

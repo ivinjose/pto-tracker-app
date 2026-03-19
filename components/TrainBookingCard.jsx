@@ -138,8 +138,12 @@ const TrainBookingCard = ({ _id, name, travel_date, train_booking_date, remarks,
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel onPress={() => setShowConfirm(false)}>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onPress={onDelete}>Continue</AlertDialogAction>
+                        <AlertDialogCancel onPress={() => setShowConfirm(false)}>
+                            <Text>Cancel</Text>
+                        </AlertDialogCancel>
+                        <AlertDialogAction onPress={onDelete}>
+                            <Text>Continue</Text>
+                        </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
