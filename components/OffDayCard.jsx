@@ -69,7 +69,7 @@ const OffDayCard = ({
 
         return [
             {
-                label: <Text>Delete</Text>,
+                label: "Delete",
                 action: () => setShowConfirm(true),
             },
         ];

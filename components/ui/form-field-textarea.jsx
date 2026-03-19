@@ -15,7 +15,7 @@ const FormFieldTextarea = ({
             name={schemaProperty}
             render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                 <View className="mb-4">
-                    {labelText && (
+                    {!!labelText && (
                         <Text className={labelStyleClass ?? "mb-1 text-base font-medium"}>
                             {labelText}
                         </Text>

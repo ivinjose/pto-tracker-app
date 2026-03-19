@@ -16,7 +16,7 @@ const FormFieldSelect = ({
             name={schemaProperty}
             render={({ field: { onChange, value } }) => (
                 <View className="w-full">
-                    {labelText && (
+                    {!!labelText && (
                         <Text className={labelStyleClass}>
                             {labelText}
                         </Text>

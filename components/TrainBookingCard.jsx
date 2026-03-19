@@ -100,13 +100,13 @@ const TrainBookingCard = ({ _id, name, travel_date, train_booking_date, remarks,
                         <Train size={64} color="#1C2B3A" strokeWidth={1.5} />
                     </View>
                     <View className="flex-1 min-w-0 justify-start">
-                        {name && <Text className="font-semibold my-1 text-[#111] text-base">{name}</Text>}
+                        {!!name && <Text className="font-semibold my-1 text-[#111] text-base">{name}</Text>}
                         {travelDate && (
                             <View className="flex-row flex-wrap items-center gap-1 mb-1">
                                 <Text className="text-sm font-normal text-[#6b7280]">
                                     Travel: {format(travelDate, "PPPP")}
                                 </Text>
-                                {is_tatkal && <Text className="font-semibold text-[#dc2626]">Tatkal</Text>}
+                                {!!is_tatkal && <Text className="font-semibold text-[#dc2626]">Tatkal</Text>}
                             </View>
                         )}
                         {bookingDate && (
@@ -114,7 +114,7 @@ const TrainBookingCard = ({ _id, name, travel_date, train_booking_date, remarks,
                                 Booking opens: {format(bookingDate, "PPPP")} at {displayTimeSlot} am
                             </Text>
                         )}
-                        {remarks && <Text className="text-[13px] text-[#6b7280] my-1">{remarks}</Text>}
+                        {!!remarks && <Text className="text-[13px] text-[#6b7280] my-1">{remarks}</Text>}
                         {!isReadOnly && (
                             <Pressable
                                 onPress={handleAddReminder}
