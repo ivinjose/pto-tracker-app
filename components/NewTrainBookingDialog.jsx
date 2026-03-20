@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-// import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import {
     Form,
     FormControl,
@@ -16,23 +14,25 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRoute } from "@react-navigation/native";
 import { differenceInCalendarDays, format, subDays } from "date-fns";
-import { Plus } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Calendar } from "react-native-calendars";
+// import { CustomDay } from "@/components/ui/CustomDay";
+// import { CustomDay } from "@/components/ui/CustomDay";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import FormFieldInput from "@/components/ui/form-field-input";
 import FormFieldTextarea from "@/components/ui/form-field-textarea";
+import { Text } from "@/components/ui/text";
 import {
     TRAIN_BOOKING_BUFFER,
     TRAIN_NORMAL_BOOKING_OPENING_TIME,
     TRAIN_TATKAL_BOOKING_OPENING_TIME,
 } from "@/constants/trainBooking";
 import formSchema from "@/schemas/TrainBookingDay";
-import useTrainBookingApiManager from "../api-managers/TrainBookingApiManager";
 import { View } from "react-native";
-import { Text } from "@/components/ui/text";
+import useTrainBookingApiManager from "../api-managers/TrainBookingApiManager";
 
 const defaultFormValues = {
     name: "",
@@ -135,113 +135,112 @@ export default function NewTrainBookingDialog({ children }) {
     }, [isCalculated, isTatkalBooking]);
 
     return (
-        <Dialog open={showNewTrainBookingDialog} onOpenChange={setShowNewTrainBookingDialog}>
-            <DialogContent>
-                <DialogHeader>
-                    <DialogTitle>Train booking details</DialogTitle>
-                </DialogHeader>
 
-                <View className="mt-2.5">
-                    <Form {...form}>
-                        <View>
-                            <FormLabel className="mb-2.5 block font-normal text-base text-[#4c4c4c]">
-                                When do you wish to travel?
-                            </FormLabel>
-                            <View className="mb-5 flex gap-2.5">
-                                <FormField
-                                    control={form.control}
-                                    name="travel_date"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-col">
-                                            <Popover modal={true} open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                                                <PopoverTrigger asChild>
-                                                    <FormControl>
-                                                        <Button
-                                                            variant={"outline"}
-                                                            className={cn(
-                                                                "w-[240px] pl-3 text-left font-light",
-                                                                !field.value && "text-muted-foreground"
-                                                            )}
-                                                        >
-                                                            {field.value ? format(field.value, "PPP") : <Text>Pick a date</Text>}
-                                                            {/* <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /> */}
-                                                            <FontAwesome name="calendar" size={24} color="black" />
-                                                        </Button>
-                                                    </FormControl>
-                                                </PopoverTrigger>
-                                                <PopoverContent className="w-auto p-0" align="start">
-                                                    {/* <Calendar
-                                                        mode="single"
-                                                        selected={field.value}
-                                                        onSelect={(date) => {
-                                                            field.onChange(date);
-                                                            setIsCalendarOpen(false);
-                                                        }}
-                                                        disabled={(date) => date < new Date(new Date().setDate(new Date().getDate() - 1))}
-                                                        initialFocus
-                                                    /> */}
-                                                </PopoverContent>
-                                            </Popover>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </View>
 
-                            <View className="mb-5">
-                                <FormFieldInput
-                                    formControl={form.control}
-                                    schemaProperty="name"
-                                    placeholder="Christmas holiday to Hometown"
-                                    labelText="Do you want to give it a name?"
-                                    labelStyleClass="mb-2.5 block font-normal text-base text-[#4c4c4c]"
-                                />
-                            </View>
 
-                            <View className="mb-5">
-                                <FormFieldTextarea
-                                    formControl={form.control}
-                                    schemaProperty="remarks"
-                                    placeholder="Type anything you want to remember"
-                                    labelText="Remarks"
-                                    labelStyleClass="mb-2.5 block font-normal text-base text-[#4c4c4c]"
-                                    inputStyleClass="min-h-[100px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
-                                />
-                            </View>
-
-                            {isCalculated && (
-                                <CalculatedBookingDate
-                                    className="my-2.5 mb-5 rounded-[5px] border border-[#BEDBFF] bg-[#EEF6FF] px-3 py-4"
-                                    travelDate={calculated.travelDate}
-                                    trainBookingDate={calculated.bookingDate}
-                                    isTatkalBooking={calculated.isTatkal}
-                                />
+        <View className="mt-2.5">
+            <Form {...form}>
+                <View>
+                    <FormLabel className="mb-2.5 block font-normal text-base text-[#4c4c4c]">
+                        When do you wish to travel?
+                    </FormLabel>
+                    <View className="mb-5 flex gap-2.5">
+                        <FormField
+                            control={form.control}
+                            name="travel_date"
+                            render={({ field }) => (
+                                <FormItem className="flex flex-col">
+                                    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                                        <PopoverTrigger asChild>
+                                            <FormControl>
+                                                <Button
+                                                    variant={"outline"}
+                                                    className={cn(
+                                                        "w-[240px] pl-3 text-left font-light",
+                                                        !field.value && "text-muted-foreground"
+                                                    )}
+                                                >
+                                                    {field.value ? <Text>{format(field.value, "PPP")}</Text> : <Text>Pick a date</Text>}
+                                                    {/* <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /> */}
+                                                    <FontAwesome name="calendar" size={24} color="black" />
+                                                </Button>
+                                            </FormControl>
+                                        </PopoverTrigger>
+                                        <PopoverContent
+                                            className="w-auto p-0"
+                                            side="top"
+                                        // align="start"
+                                        // closeOnOverlayPress={false}
+                                        >
+                                            <Calendar
+                                                initialDate={field.value ? format(field.value, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")}
+                                                minDate={format(new Date(), "yyyy-MM-dd")}
+                                                markedDates={
+                                                    field.value
+                                                        ? { [format(field.value, "yyyy-MM-dd")]: { selected: true } }
+                                                        : {}
+                                                }
+                                                onDayPress={(day) => {
+                                                    console.log("day", day);
+                                                    field.onChange(new Date(day.dateString));
+                                                    setIsCalendarOpen(false);
+                                                }}
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                    <FormMessage />
+                                </FormItem>
                             )}
+                        />
+                    </View>
 
-                            <View className="flex justify-end gap-2.5">
-                                {isCalculated && (
-                                    <Button type="button" variant="secondary" onPress={onCancel}>
-                                        Cancel
-                                    </Button>
-                                )}
-                                <Button onPress={form.handleSubmit(onSubmit)}>
-                                    {isCalculated ? "Save date" : "Calculate train booking date"}
-                                </Button>
-                            </View>
-                        </View>
-                    </Form>
+                    <View className="mb-5">
+                        <FormFieldInput
+                            formControl={form.control}
+                            schemaProperty="name"
+                            placeholder="Christmas holiday to Hometown"
+                            labelText="Do you want to give it a name?"
+                            labelStyleClass="mb-2.5 block font-normal text-base text-[#4c4c4c]"
+                        />
+                    </View>
+
+                    <View className="mb-5">
+                        <FormFieldTextarea
+                            formControl={form.control}
+                            schemaProperty="remarks"
+                            placeholder="Type anything you want to remember"
+                            labelText="Remarks"
+                            labelStyleClass="mb-2.5 block font-normal text-base text-[#4c4c4c]"
+                            inputStyleClass="min-h-[100px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                        />
+                    </View>
+
+                    {isCalculated && (
+                        <CalculatedBookingDate
+                            className="my-2.5 mb-5 rounded-[5px] border border-[#BEDBFF] bg-[#EEF6FF] px-3 py-4"
+                            travelDate={calculated.travelDate}
+                            trainBookingDate={calculated.bookingDate}
+                            isTatkalBooking={calculated.isTatkal}
+                        />
+                    )}
+
+                    <View className="flex justify-end gap-2.5">
+                        {isCalculated && (
+                            <Button type="button" variant="secondary" onPress={onCancel}>
+                                <Text>Cancel</Text>
+                            </Button>
+                        )}
+                        <Button onPress={form.handleSubmit(onSubmit)}>
+                            <Text>{isCalculated ? "Save date" : "Calculate train booking date"}</Text>
+                        </Button>
+                    </View>
                 </View>
-            </DialogContent>
+            </Form>
+        </View>
 
-            {children || (
-                <DialogTrigger asChild>
-                    <Button type="button">
-                        <Plus size={18} />
-                        &nbsp;New train booking
-                    </Button>
-                </DialogTrigger>
-            )}
-        </Dialog>
+
+
+
     );
 }
 

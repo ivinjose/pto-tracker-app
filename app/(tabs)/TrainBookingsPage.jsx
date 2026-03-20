@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react-native";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Button, Modal, Pressable, ScrollView, Text, View } from "react-native";
 
 import useTrainBookingApiManager from "@/api-managers/TrainBookingApiManager";
 import CardView from "@/components/CardView";
@@ -9,9 +9,11 @@ import TrainBookingCard from "@/components/TrainBookingCard";
 import {
     DialogTrigger,
 } from "@/components/ui/dialog";
+import { useState } from "react";
 
 export default function TrainBookingsPage() {
     const trainBookingApiManager = useTrainBookingApiManager();
+    const [showNewTrainBookingDialog, setShowNewTrainBookingDialog] = useState(false);
 
     const { data: trainBookings = [], isLoading } = useQuery({
         queryKey: ["trainBookings"],
@@ -23,21 +25,27 @@ export default function TrainBookingsPage() {
     return (
         <View className="flex-1 bg-white">
             <View className="p-4 pb-0">
-                <Text className="text-2xl font-bold text-[#212933]">
-                    Manage Train Bookings
-                </Text>
+                <Pressable onPress={() => setShowNewTrainBookingDialog(true)} className="mt-4 flex-row items-center justify-center gap-2 rounded-lg bg-[#212933] px-4 py-3 active:opacity-90">
+                    <Text className="text-lg text-[#ffffff]">
+                        Add new booking
+                    </Text>
+                </Pressable>
 
                 {!isEmpty && !isLoading && (
-                    <NewTrainBookingDialog>
-                        <DialogTrigger asChild>
-                            <Pressable className="mt-4 flex-row items-center justify-center gap-2 rounded-lg bg-[#212933] px-4 py-3 active:opacity-90">
-                                <Plus size={18} color="white" />
-                                <Text className="text-base font-medium text-white">
-                                    New train booking
-                                </Text>
-                            </Pressable>
-                        </DialogTrigger>
-                    </NewTrainBookingDialog>
+                    <Modal
+                        visible={showNewTrainBookingDialog}
+                        onRequestClose={() => setShowNewTrainBookingDialog(false)}
+                        animationType="slide"
+                        presentationStyle="pageSheet"
+                    >
+                        <View className="flex-1 items-center justify-center bg-white">
+                            <Text className="text-2xl font-bold text-[#212933]">
+                                <NewTrainBookingDialog />
+
+                            </Text>
+                        </View>
+                        <Button onPress={() => setShowNewTrainBookingDialog(false)} title="Close" />
+                    </Modal>
                 )}
             </View>
 
