@@ -33,6 +33,7 @@ import {
 } from "@/constants/trainBooking";
 import formSchema from "@/schemas/TrainBookingDay";
 import { Modal, Pressable, ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useTrainBookingApiManager from "../api-managers/TrainBookingApiManager";
 
 const defaultFormValues = {
@@ -42,7 +43,8 @@ const defaultFormValues = {
     remarks: "",
 };
 
-export default function NewTrainBookingDialog({ children }) {
+export default function NewTrainBookingDialog() {
+    const insets = useSafeAreaInsets();
     const [isOpen, setIsOpen] = useState(false);
     const [isCalculated, setIsCalculated] = useState(false);
     const [isTatkalBooking, setIsTatkalBooking] = useState(false);
@@ -221,11 +223,39 @@ export default function NewTrainBookingDialog({ children }) {
 
     return (
         <>
-            <Pressable onPress={() => setIsOpen(!isOpen)} className="mt-4 flex-row items-center justify-center gap-2 rounded-lg bg-[#212933] px-4 py-3 active:opacity-90">
-                <Text className="text-lg text-[#ffffff]">
-                    Add new booking
-                </Text>
-            </Pressable>
+            <View
+                pointerEvents="box-none"
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                }}
+            >
+                <Pressable
+                    onPress={() => setIsOpen(true)}
+                    style={{
+                        position: "absolute",
+                        right: 20,
+                        bottom: 20 + insets.bottom,
+                        width: 56,
+                        height: 56,
+                        borderRadius: 28,
+                        backgroundColor: "#212933",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        elevation: 4,
+                        shadowColor: "#000",
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                    }}
+                    className="active:opacity-90"
+                >
+                    <AntDesign name="plus" size={24} color="#ffffff" />
+                </Pressable>
+            </View>
             <Modal
                 visible={isOpen}
                 onRequestClose={onCancel}

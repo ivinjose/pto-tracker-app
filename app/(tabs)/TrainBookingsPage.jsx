@@ -18,12 +18,6 @@ export default function TrainBookingsPage() {
 
     return (
         <View className="flex-1 bg-white">
-            <View className="p-4 pb-0">
-                {!isEmpty && !isLoading && (
-                    <NewTrainBookingDialog />
-                )}
-            </View>
-
             <View className="flex-1">
                 {isLoading ? (
                     <Loading />
@@ -32,7 +26,6 @@ export default function TrainBookingsPage() {
                         <Text className="text-sm text-[#6b7280] text-center">
                             Looks like you haven&apos;t added anything yet. Add something to get started
                         </Text>
-                        <NewTrainBookingDialog />
                     </View>
                 ) : (
                     <ScrollView
@@ -52,6 +45,8 @@ export default function TrainBookingsPage() {
                     </ScrollView>
                 )}
             </View>
+
+            <NewTrainBookingDialog />
         </View>
     );
 }
