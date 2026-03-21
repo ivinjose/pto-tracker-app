@@ -14,8 +14,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Calendar as CalendarIcon, CircleX, Plus } from "lucide-react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { differenceInCalendarDays, format, subDays } from "date-fns";
@@ -151,7 +150,7 @@ export default function NewTrainBookingDialog() {
                                         <Accordion type='single' collapsible>
                                             <AccordionItem value='item-1'>
                                                 <AccordionTrigger className="flex-row items-center gap-2 justify-start">
-                                                    <FontAwesome name="calendar" size={24} color="black" />
+                                                    <CalendarIcon size={24} color="#000" />
                                                     {/* <Button
                                                         variant={"outline"}
                                                         className={cn(
@@ -253,7 +252,7 @@ export default function NewTrainBookingDialog() {
                     }}
                     className="active:opacity-90"
                 >
-                    <AntDesign name="plus" size={24} color="#ffffff" />
+                    <Plus size={24} color="#ffffff" />
                 </Pressable>
             </View>
             <Modal
@@ -268,7 +267,7 @@ export default function NewTrainBookingDialog() {
                         className="absolute left-4 top-4 z-10"
                         hitSlop={8}
                     >
-                        <AntDesign name="close-circle" size={28} color="#4c4c4c" />
+                        <CircleX size={28} color="#4c4c4c" />
                     </Pressable>
                     <ScrollView
                         className="flex-1"
