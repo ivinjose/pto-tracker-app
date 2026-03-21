@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Redirect, Tabs } from 'expo-router';
-import { ActivityIndicator, Pressable, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import useAuth from '../../hooks/useAuth';
 
 import { HapticTab } from '@/components/ui/haptic-tab';
@@ -10,7 +10,7 @@ import { LogoutTabButton } from '@/components/ui/logout-tab-button';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import useLogout from '@/hooks/useLogout';
 import { Colors } from '@/lib/theme';
-import { LogOut } from 'lucide-react-native';
+import { Train } from "lucide-react-native";
 
 export default function AppLayout() {
 	const colorScheme = useColorScheme();
@@ -44,24 +44,29 @@ export default function AppLayout() {
 				options={{
 					title: 'Home',
 					tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-					headerRight: () => (
-						<Pressable
-							onPress={async () => {
-								await logout();
-							}}
-							style={{ marginRight: 15 }}
-						>
-							<LogOut size={24} color="red" />
-						</Pressable>
-					),
+					// headerRight: () => (
+					// 	<Pressable
+					// 		onPress={async () => {
+					// 			await logout();
+					// 		}}
+					// 		style={{ marginRight: 15 }}
+					// 	>
+					// 		<LogOut size={24} color="red" />
+					// 	</Pressable>
+					// ),
 				}}
 			/>
-			<Tabs.Screen name="TrainBookingsPage" options={{ title: 'Train Bookings' }} />
-			<Tabs.Screen name="ProfileScreen" options={{ title: 'Profiles' }} />
+			<Tabs.Screen
+				name="TrainBookingsPage"
+				options={{
+					title: 'Train Bookings',
+					tabBarIcon: ({ color }) => <Train size={28} color={color} strokeWidth={1.5} />,
+				}}
+			/>
 			<Tabs.Screen
 				name="logout"
 				options={{
-					title: 'Account',
+					title: 'Logout',
 					tabBarIcon: ({ color }) => (
 						<IconSymbol size={28} name="rectangle.portrait.and.arrow.right" color={color} />
 					),
