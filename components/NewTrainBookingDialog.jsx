@@ -1,3 +1,9 @@
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -7,9 +13,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/hooks/use-toast";
-import { cn } from "@/lib/utils";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRoute } from "@react-navigation/native";
@@ -18,8 +22,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "react-native-calendars";
 // import { CustomDay } from "@/components/ui/CustomDay";
-// import { CustomDay } from "@/components/ui/CustomDay";
-
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import FormFieldInput from "@/components/ui/form-field-input";
@@ -135,10 +137,8 @@ export default function NewTrainBookingDialog({ children }) {
     }, [isCalculated, isTatkalBooking]);
 
     return (
+        <View className="mt">
 
-
-
-        <View className="mt-2.5">
             <Form {...form}>
                 <View>
                     <FormLabel className="mb-2.5 block font-normal text-base text-[#4c4c4c]">
@@ -150,44 +150,41 @@ export default function NewTrainBookingDialog({ children }) {
                             name="travel_date"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                                        <PopoverTrigger asChild>
-                                            <FormControl>
-                                                <Button
-                                                    variant={"outline"}
-                                                    className={cn(
-                                                        "w-[240px] pl-3 text-left font-light",
-                                                        !field.value && "text-muted-foreground"
-                                                    )}
-                                                >
+                                    <FormControl>
+                                        <Accordion type='single' collapsible>
+                                            <AccordionItem value='item-1'>
+                                                <AccordionTrigger>
+                                                    {/* <Button
+                                                        variant={"outline"}
+                                                        className={cn(
+                                                            " pl-3 text-left font-light",
+                                                            !field.value && "text-muted-foreground"
+                                                        )}
+                                                    > */}
                                                     {field.value ? <Text>{format(field.value, "PPP")}</Text> : <Text>Pick a date</Text>}
-                                                    {/* <CalendarIcon className="ml-auto h-4 w-4 opacity-50" /> */}
                                                     <FontAwesome name="calendar" size={24} color="black" />
-                                                </Button>
-                                            </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent
-                                            className="w-auto p-0"
-                                            side="top"
-                                        // align="start"
-                                        // closeOnOverlayPress={false}
-                                        >
-                                            <Calendar
-                                                initialDate={field.value ? format(field.value, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")}
-                                                minDate={format(new Date(), "yyyy-MM-dd")}
-                                                markedDates={
-                                                    field.value
-                                                        ? { [format(field.value, "yyyy-MM-dd")]: { selected: true } }
-                                                        : {}
-                                                }
-                                                onDayPress={(day) => {
-                                                    console.log("day", day);
-                                                    field.onChange(new Date(day.dateString));
-                                                    setIsCalendarOpen(false);
-                                                }}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
+                                                    {/* </Button> */}
+                                                </AccordionTrigger>
+                                                <AccordionContent>
+                                                    <Calendar
+                                                        initialDate={field.value ? format(field.value, "yyyy-MM-dd") : format(new Date(), "yyyy-MM-dd")}
+                                                        enableSwipeMonths={true}
+                                                        minDate={format(new Date(), "yyyy-MM-dd")}
+                                                        markedDates={
+                                                            field.value
+                                                                ? { [format(field.value, "yyyy-MM-dd")]: { selected: true } }
+                                                                : {}
+                                                        }
+                                                        onDayPress={(day) => {
+                                                            console.log("day", day);
+                                                            field.onChange(new Date(day.dateString));
+                                                            setIsCalendarOpen(false);
+                                                        }}
+                                                    />
+                                                </AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    </FormControl>
                                     <FormMessage />
                                 </FormItem>
                             )}
