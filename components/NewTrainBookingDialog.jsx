@@ -14,6 +14,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -31,7 +32,7 @@ import {
     TRAIN_TATKAL_BOOKING_OPENING_TIME,
 } from "@/constants/trainBooking";
 import formSchema from "@/schemas/TrainBookingDay";
-import { Modal, Pressable, Button as RNButton, ScrollView, View } from "react-native";
+import { Modal, Pressable, ScrollView, View } from "react-native";
 import useTrainBookingApiManager from "../api-managers/TrainBookingApiManager";
 
 const defaultFormValues = {
@@ -121,6 +122,7 @@ export default function NewTrainBookingDialog({ children }) {
         form.reset({ ...defaultFormValues, travel_date: new Date() });
         setIsCalculated(false);
         setIsTatkalBooking(false);
+        setIsOpen(false);
     };
 
     const calculated = useMemo(() => {
@@ -146,7 +148,8 @@ export default function NewTrainBookingDialog({ children }) {
                                     <FormControl>
                                         <Accordion type='single' collapsible>
                                             <AccordionItem value='item-1'>
-                                                <AccordionTrigger>
+                                                <AccordionTrigger className="flex-row items-center gap-2 justify-start">
+                                                    <FontAwesome name="calendar" size={24} color="black" />
                                                     {/* <Button
                                                         variant={"outline"}
                                                         className={cn(
@@ -155,7 +158,7 @@ export default function NewTrainBookingDialog({ children }) {
                                                         )}
                                                     > */}
                                                     {field.value ? <Text>{format(field.value, "PPP")}</Text> : <Text>Pick a date</Text>}
-                                                    <FontAwesome name="calendar" size={24} color="black" />
+
                                                     {/* </Button> */}
                                                 </AccordionTrigger>
                                                 <AccordionContent>
@@ -211,17 +214,6 @@ export default function NewTrainBookingDialog({ children }) {
                             isTatkalBooking={calculated.isTatkal}
                         />
                     )}
-
-                    <View className="flex justify-end gap-2.5">
-                        {isCalculated && (
-                            <Button type="button" variant="secondary" onPress={onCancel}>
-                                <Text>Cancel</Text>
-                            </Button>
-                        )}
-                        <Button onPress={form.handleSubmit(onSubmit)}>
-                            <Text>{isCalculated ? "Save date" : "Calculate train booking date"}</Text>
-                        </Button>
-                    </View>
                 </View>
             </Form>
         </View>
@@ -236,21 +228,30 @@ export default function NewTrainBookingDialog({ children }) {
             </Pressable>
             <Modal
                 visible={isOpen}
-                onRequestClose={() => setIsOpen(false)}
+                onRequestClose={onCancel}
                 animationType="slide"
                 presentationStyle="pageSheet"
             >
                 <View className="flex-1">
+                    <Pressable
+                        onPress={onCancel}
+                        className="absolute left-4 top-4 z-10"
+                        hitSlop={8}
+                    >
+                        <AntDesign name="close-circle" size={28} color="#4c4c4c" />
+                    </Pressable>
                     <ScrollView
                         className="flex-1"
-                        contentContainerStyle={{ padding: 40, paddingBottom: 24 }}
+                        contentContainerStyle={{ padding: 40, paddingTop: 56, paddingBottom: 24 }}
                         showsVerticalScrollIndicator={false}
                         keyboardShouldPersistTaps="handled"
                     >
                         {formContent}
                     </ScrollView>
-                    <View className="px-10 pb-4">
-                        <RNButton onPress={() => setIsOpen(false)} title="Close" />
+                    <View className="px-10 p-4">
+                        <Button onPress={form.handleSubmit(onSubmit)}>
+                            <Text>{isCalculated ? "Save date" : "Calculate train booking date"}</Text>
+                        </Button>
                     </View>
                 </View>
             </Modal>
