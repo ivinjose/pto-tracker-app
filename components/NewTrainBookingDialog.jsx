@@ -16,13 +16,11 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRoute } from "@react-navigation/native";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { differenceInCalendarDays, format, subDays } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "react-native-calendars";
-// import { CustomDay } from "@/components/ui/CustomDay";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import FormFieldInput from "@/components/ui/form-field-input";
 import FormFieldTextarea from "@/components/ui/form-field-textarea";
@@ -33,7 +31,7 @@ import {
     TRAIN_TATKAL_BOOKING_OPENING_TIME,
 } from "@/constants/trainBooking";
 import formSchema from "@/schemas/TrainBookingDay";
-import { View } from "react-native";
+import { Modal, Pressable, Button as RNButton, ScrollView, View } from "react-native";
 import useTrainBookingApiManager from "../api-managers/TrainBookingApiManager";
 
 const defaultFormValues = {
@@ -44,13 +42,9 @@ const defaultFormValues = {
 };
 
 export default function NewTrainBookingDialog({ children }) {
-    const route = useRoute();
-    const [showNewTrainBookingDialog, setShowNewTrainBookingDialog] = useState(
-        route.params?.showNewTrainBookingDialog === "true"
-    );
+    const [isOpen, setIsOpen] = useState(false);
     const [isCalculated, setIsCalculated] = useState(false);
     const [isTatkalBooking, setIsTatkalBooking] = useState(false);
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
     const { toast } = useToast();
 
     const form = useForm({
@@ -86,7 +80,7 @@ export default function NewTrainBookingDialog({ children }) {
         onSuccess: async () => {
             form.reset({ ...defaultFormValues, travel_date: new Date() });
             setIsCalculated(false);
-            setShowNewTrainBookingDialog(false);
+            setIsOpen(false);
             await queryClient.invalidateQueries(["trainBookings"]);
             toast({
                 variant: "",
@@ -133,12 +127,11 @@ export default function NewTrainBookingDialog({ children }) {
         const td = form.getValues("travel_date");
         const bd = form.getValues("train_booking_date");
         return { travelDate: td, bookingDate: bd, isTatkal: isTatkalBooking };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
     }, [isCalculated, isTatkalBooking]);
 
-    return (
+    const formContent = (
         <View className="mt">
-
             <Form {...form}>
                 <View>
                     <FormLabel className="mb-2.5 block font-normal text-base text-[#4c4c4c]">
@@ -176,9 +169,7 @@ export default function NewTrainBookingDialog({ children }) {
                                                                 : {}
                                                         }
                                                         onDayPress={(day) => {
-                                                            console.log("day", day);
                                                             field.onChange(new Date(day.dateString));
-                                                            setIsCalendarOpen(false);
                                                         }}
                                                     />
                                                 </AccordionContent>
@@ -208,7 +199,7 @@ export default function NewTrainBookingDialog({ children }) {
                             placeholder="Type anything you want to remember"
                             labelText="Remarks"
                             labelStyleClass="mb-2.5 block font-normal text-base text-[#4c4c4c]"
-                            inputStyleClass="min-h-[100px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                        // inputStyleClass="min-h-[100px] rounded-lg border border-gray-300 px-3 py-2 text-sm"
                         />
                     </View>
 
@@ -234,10 +225,36 @@ export default function NewTrainBookingDialog({ children }) {
                 </View>
             </Form>
         </View>
+    );
 
-
-
-
+    return (
+        <>
+            <Pressable onPress={() => setIsOpen(!isOpen)} className="mt-4 flex-row items-center justify-center gap-2 rounded-lg bg-[#212933] px-4 py-3 active:opacity-90">
+                <Text className="text-lg text-[#ffffff]">
+                    Add new booking
+                </Text>
+            </Pressable>
+            <Modal
+                visible={isOpen}
+                onRequestClose={() => setIsOpen(false)}
+                animationType="slide"
+                presentationStyle="pageSheet"
+            >
+                <View className="flex-1">
+                    <ScrollView
+                        className="flex-1"
+                        contentContainerStyle={{ padding: 40, paddingBottom: 24 }}
+                        showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled"
+                    >
+                        {formContent}
+                    </ScrollView>
+                    <View className="px-10 pb-4">
+                        <RNButton onPress={() => setIsOpen(false)} title="Close" />
+                    </View>
+                </View>
+            </Modal>
+        </>
     );
 }
 
