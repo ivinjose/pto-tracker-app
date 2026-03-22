@@ -14,11 +14,11 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Calendar as CalendarIcon, CircleX, Plus } from "lucide-react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { differenceInCalendarDays, format, subDays } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
+import { Calendar as CalendarIcon, CircleX, Plus } from "lucide-react-native";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "react-native-calendars";
 
@@ -47,6 +47,7 @@ export default function NewTrainBookingDialog() {
     const [isOpen, setIsOpen] = useState(false);
     const [isCalculated, setIsCalculated] = useState(false);
     const [isTatkalBooking, setIsTatkalBooking] = useState(false);
+    const scrollViewRef = useRef(null);
     const { toast } = useToast();
 
     const form = useForm({
@@ -114,6 +115,9 @@ export default function NewTrainBookingDialog() {
             });
             setIsTatkalBooking(tatkal);
             setIsCalculated(true);
+            setTimeout(() => {
+                scrollViewRef.current?.scrollToEnd({ animated: true });
+            }, 100);
             return;
         }
         await addTrainBooking({ ...data, is_tatkal: isTatkalBooking });
@@ -270,6 +274,7 @@ export default function NewTrainBookingDialog() {
                         <CircleX size={28} color="#4c4c4c" />
                     </Pressable>
                     <ScrollView
+                        ref={scrollViewRef}
                         className="flex-1"
                         contentContainerStyle={{ padding: 40, paddingTop: 56, paddingBottom: 24 }}
                         showsVerticalScrollIndicator={false}
