@@ -1,5 +1,3 @@
-import { useState, useCallback, useMemo } from "react";
-import { Linking, Pressable, Text, View } from "react-native";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,14 +8,18 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useCallback, useMemo, useState } from "react";
+import { Linking, Text, View } from "react-native";
 
-import { Train } from "lucide-react-native";
-import { format } from "date-fns";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Badge } from '@/components/ui/badge';
 import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { BellRing, Train } from "lucide-react-native";
 
-import CardView from "@/components/CardView";
+
 import useTrainBookingApiManager from "@/api-managers/TrainBookingApiManager";
+import CardView from "@/components/CardView";
 import { buildGoogleCalendarUrl } from "@/lib/helpers";
 
 const REMINDER_EVENT_DURATION_HOURS = 1;
@@ -106,7 +108,9 @@ const TrainBookingCard = ({ _id, name, travel_date, train_booking_date, remarks,
                                 <Text className="text-sm font-normal text-[#6b7280]">
                                     Travel: {format(travelDate, "PPPP")}
                                 </Text>
-                                {!!is_tatkal && <Text className="font-semibold text-[#dc2626]">Tatkal</Text>}
+                                {!!is_tatkal && <Badge variant="destructive">
+                                    <Text className="text-white font-medium text-[13px]">Tatkal</Text>
+                                </Badge>}
                             </View>
                         )}
                         {bookingDate && (
@@ -116,14 +120,12 @@ const TrainBookingCard = ({ _id, name, travel_date, train_booking_date, remarks,
                         )}
                         {!!remarks && <Text className="text-[13px] text-[#6b7280] my-1">{remarks}</Text>}
                         {!isReadOnly && (
-                            <Pressable
-                                onPress={handleAddReminder}
-                                className="mt-4 w-full rounded-lg bg-[#212933] px-4 py-3 active:opacity-90"
-                            >
-                                <Text className="text-center text-base font-medium text-white">
-                                    Add a reminder
-                                </Text>
-                            </Pressable>
+                            // <Pressable
+                            //     onPress={handleAddReminder}
+                            //     className="mt-4 items-center justify-center rounded-lg bg-[#7aaeee] px-4 py-3 active:opacity-90"
+                            // >
+                            <BellRing size={26} color="#3469d3" onPress={handleAddReminder} />
+                            // </Pressable>
                         )}
                     </View>
                 </View>
